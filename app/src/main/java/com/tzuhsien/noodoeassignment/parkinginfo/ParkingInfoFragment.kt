@@ -7,18 +7,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.tzuhsien.noodoeassignment.databinding.FragmentParkingInfoBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ParkingInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentParkingInfoBinding
 
-    private val viewModel:ParkingInfoViewModel by viewModels()
+    private val viewModel: ParkingInfoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentParkingInfoBinding.inflate(layoutInflater)
+
+        viewModel
+
         return binding.root
     }
 

@@ -1,12 +1,10 @@
 package com.tzuhsien.noodoeassignment.data.source
 
-import com.tzuhsien.amazingtalker.util.Util
-import com.tzuhsien.noodoeassignment.R
 import com.tzuhsien.noodoeassignment.data.Result
 import com.tzuhsien.noodoeassignment.data.model.LoginInput
 import com.tzuhsien.noodoeassignment.data.model.LoginResult
+import com.tzuhsien.noodoeassignment.data.model.ParkingInfoResult
 import com.tzuhsien.noodoeassignment.data.source.local.UserManager
-import com.tzuhsien.noodoeassignment.network.LoadApiStatus
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -19,6 +17,7 @@ class DefaultRepository @Inject constructor(
          when (loginResult) {
             is Result.Success -> {
                 UserManager.userName = loginResult.data.userName
+                UserManager.objectId = loginResult.data.objectId
                 UserManager.timeZone = loginResult.data.timeZone
                 UserManager.sessionToken = loginResult.data.sessionToken
                 
@@ -31,4 +30,10 @@ class DefaultRepository @Inject constructor(
 
         return loginResult
     }
+
+    override suspend fun getParkingInfo(): Result<ParkingInfoResult> {
+        return remoteDataSource.getParkingInfo()
+    }
+
+
 }

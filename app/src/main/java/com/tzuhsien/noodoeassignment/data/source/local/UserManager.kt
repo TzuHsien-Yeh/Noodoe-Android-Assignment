@@ -9,7 +9,7 @@ object UserManager {
     private const val USER_INFO = "USER"
     private const val USER_NAME = "userName"
     private const val TIME_ZONE = "timeZone"
-    private const val SESSION_TOKEN = "sessionToken"
+    private const val OBJECT_ID = "objectId"
 
     private val preferences: SharedPreferences =
         MyApplication.instance.getSharedPreferences(USER_INFO, Context.MODE_PRIVATE)
@@ -25,6 +25,15 @@ object UserManager {
             editor.putString(USER_NAME, value).commit()
         }
 
+    var objectId: String? = null
+        get() {
+            return preferences.getString(OBJECT_ID, null)
+        }
+        set(value) {
+            field = value
+            editor.putString(OBJECT_ID, value).commit()
+        }
+
     var timeZone: String? = null
         get() {
             return preferences.getString(TIME_ZONE, null)
@@ -34,14 +43,6 @@ object UserManager {
             editor.putString(TIME_ZONE, value).commit()
         }
 
-//    var sessionToken: String? = null
-//        get() {
-//            return preferences.getString(SESSION_TOKEN, null)
-//        }
-//        set(value) {
-//            field = value
-//            editor.putString(SESSION_TOKEN, value).commit()
-//        }
 
     var sessionToken: String? = null
 

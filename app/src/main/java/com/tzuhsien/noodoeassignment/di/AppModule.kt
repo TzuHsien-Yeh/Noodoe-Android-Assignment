@@ -7,6 +7,7 @@ import com.tzuhsien.noodoeassignment.data.source.DefaultRepository
 import com.tzuhsien.noodoeassignment.data.source.Repository
 import com.tzuhsien.noodoeassignment.data.source.remote.RemoteDataSource
 import com.tzuhsien.noodoeassignment.network.NoodoeApiService
+import com.tzuhsien.noodoeassignment.network.ParkingApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +16,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -24,27 +27,29 @@ object AppModule {
     @Provides
     @Singleton
     fun provideInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().setLevel(
-            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-            else HttpLoggingInterceptor.Level.NONE
-        )
+        if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+        else HttpLoggingInterceptor.Level.NONE
+    )
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .addInterceptor { chain ->
-            val url = chain
-                .request()
-                .url
-                .newBuilder()
-                .build()
-            chain.proceed(chain.request().newBuilder().url(url).build())
-        }
-        .build()
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor { chain ->
+                val url = chain
+                    .request()
+                    .url
+                    .newBuilder()
+                    .build()
+                chain.proceed(chain.request().newBuilder().url(url).build())
+            }
+            .build()
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    @Named("noodoeApiService")
+    fun provideRetrofit1(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(Constants.NOODOE_BASE_URL)
         .client(okHttpClient)
@@ -52,39 +57,34 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoodoeApiService(retrofit: Retrofit): NoodoeApiService = retrofit.create(NoodoeApiService::class.java)
+    fun provideNoodoeApiService(@Named("noodoeApiService") retrofit: Retrofit): NoodoeApiService =
+        retrofit.create(NoodoeApiService::class.java)
 
-//    val loggingInterceptor =
-//        HttpLoggingInterceptor().setLevel(
-//            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-//            else HttpLoggingInterceptor.Level.NONE
-//        )
-//
-//    val client = OkHttpClient.Builder()
-//        .addInterceptor(loggingInterceptor)
-//        .build()
-//
-//    @Provides
-//    @Singleton // make sure only one instance of Api provided throughout the whole app life
-//    fun provideNoodoeApi(): NoodoeApiService {
-//        return Retrofit.Builder()
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .baseUrl(NOODOE_BASE_URL)
-//            .client(client)
-//            .build()
-//            .create(NoodoeApiService::class.java)
-//    }
+    @Singleton
+    @Provides
+    @Named("parkingApiService")
+    fun provideRetrofit2(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(Constants.PARKING_BASE_URL)
+        .client(okHttpClient)
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideParkingApiService(@Named("parkingApiService") retrofit: Retrofit): ParkingApiService =
+        retrofit.create(ParkingApiService::class.java)
 
     @Provides
     @Singleton
     fun provideRemoteDataSource(
-        noodoeApiService: NoodoeApiService
-    ): DataSource = RemoteDataSource(noodoeApiService)
+        noodoeApiService: NoodoeApiService,
+        parkingApiService: ParkingApiService
+    ): DataSource = RemoteDataSource(noodoeApiService, parkingApiService)
 
     @Provides
     @Singleton // make sure only one instance provided throughout the whole app life
     fun provideRepository(
-        remoteDataSource: DataSource
+        remoteDataSource: DataSource,
     ): Repository = DefaultRepository(remoteDataSource)
 
 }
