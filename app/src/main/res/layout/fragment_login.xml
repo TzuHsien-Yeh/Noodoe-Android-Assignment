@@ -14,11 +14,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        app:placeholderText="User name">
+        app:boxBackgroundColor="@null"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="2dp"
+        app:boxCornerRadiusTopStart="4dp"
+        app:boxCornerRadiusTopEnd="4dp"
+        app:boxCornerRadiusBottomStart="4dp"
+        app:boxCornerRadiusBottomEnd="4dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_user_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:hint="@string/email" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -26,14 +35,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.3">
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/input_user_name"
+        app:layout_constraintVertical_bias="0.3"
+        app:boxBackgroundColor="@null"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="2dp"
+        app:boxCornerRadiusTopStart="4dp"
+        app:boxCornerRadiusTopEnd="4dp"
+        app:boxCornerRadiusBottomStart="4dp"
+        app:boxCornerRadiusBottomEnd="4dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_password"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:hint="@string/password" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <Button
+        android:id="@+id/btn_log_in"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintTop_toBottomOf="@+id/input_password"
+        app:layout_constraintStart_toStartOf="@id/input_password"
+        app:layout_constraintEnd_toEndOf="@id/input_password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:backgroundTint="#ff6600"
+        android:textColor="@color/black"
+        android:text="@string/log_in" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

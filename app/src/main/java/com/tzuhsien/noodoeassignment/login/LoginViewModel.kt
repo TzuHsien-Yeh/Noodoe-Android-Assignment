@@ -1,10 +1,6 @@
 package com.tzuhsien.noodoeassignment.login
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.tzuhsien.amazingtalker.util.Util
 import com.tzuhsien.noodoeassignment.data.Result
 import com.tzuhsien.noodoeassignment.R
@@ -20,8 +16,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
 ) : ViewModel() {
+
+    val userName = MutableLiveData<String>()
+    val password = MutableLiveData<String>()
 
     private val _status = MutableLiveData<LoadApiStatus>()
     val status: LiveData<LoadApiStatus>
@@ -31,44 +30,69 @@ class LoginViewModel @Inject constructor(
     val error: LiveData<String?>
         get() = _error
 
-    init {
-        Timber.d("viewmodel init")
-        logIn()
+
+    fun checkToLogIn(){
+        if (checkInputValidity()) {
+            logIn()
+        } else {
+            showErrorMsg()
+        }
     }
 
-    fun logIn(){
+    private fun checkInputValidity(): Boolean {
+        return !(userName.value.isNullOrEmpty() || password.value.isNullOrEmpty())
+    }
 
-        viewModelScope.launch {
-            Timber.d("login fun called")
 
-            _status.value = LoadApiStatus.LOADING
+    private fun showErrorMsg() {
+        _error.value = if (userName.value.isNullOrEmpty() && password.value.isNullOrEmpty()) {
+            Util.getString(R.string.please_input_to_login)
+        } else if (userName.value.isNullOrEmpty()) {
+            Util.getString(R.string.invalid_user_name)
+        } else if (password.value.isNullOrEmpty()){
+            Util.getString(R.string.invalid_password)
+        } else {
+            null
+        }
+    }
 
-            val result = withContext(Dispatchers.IO) {
-                repository.logIn(
-                    LoginInput("hw001@noodoe.com", "homework")
-                )
-            }
+    fun logIn() {
 
-            when (result) {
-                is Result.Success -> {
-                    _error.value = null
-                    _status.value = LoadApiStatus.DONE
+        if (null != userName.value && null != password.value) {
 
-                    Timber.d("result.data = ${result.data}")
-                    result.data
+            viewModelScope.launch {
+
+                Timber.d("login fun called")
+
+                _status.value = LoadApiStatus.LOADING
+
+                val result = withContext(Dispatchers.IO) {
+                    repository.logIn(
+                        LoginInput(userName.value!!, password.value!!)
+                    )
                 }
-                is Result.Fail -> {
-                    _error.value = result.error
-                    _status.value = LoadApiStatus.ERROR
-                    Timber.d("Log in Result.Fail: ${error.value}")
-                }
-                is Result.Error -> {
-                    _error.value = result.exception.toString()
-                    _status.value = LoadApiStatus.ERROR
-                }
-                else -> {
-                    _error.value = Util.getString(R.string.unknown_error)
-                    _status.value = LoadApiStatus.ERROR
+
+                when (result) {
+                    is Result.Success -> {
+                        _error.value = null
+                        _status.value = LoadApiStatus.DONE
+
+                        Timber.d("result.data = ${result.data}")
+                        result.data
+                    }
+                    is Result.Fail -> {
+                        _error.value = result.error
+                        _status.value = LoadApiStatus.ERROR
+                        Timber.d("Log in Result.Fail: ${error.value}")
+                    }
+                    is Result.Error -> {
+                        _error.value = result.exception.toString()
+                        _status.value = LoadApiStatus.ERROR
+                    }
+                    else -> {
+                        _error.value = Util.getString(R.string.unknown_error)
+                        _status.value = LoadApiStatus.ERROR
+                    }
                 }
             }
         }
