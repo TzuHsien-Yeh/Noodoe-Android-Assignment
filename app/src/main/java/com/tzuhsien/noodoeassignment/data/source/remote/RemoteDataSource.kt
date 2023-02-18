@@ -4,13 +4,12 @@ import com.tzuhsien.amazingtalker.util.Util
 import com.tzuhsien.noodoeassignment.Constants
 import com.tzuhsien.noodoeassignment.R
 import com.tzuhsien.noodoeassignment.data.Result
-import com.tzuhsien.noodoeassignment.data.model.LoginInput
-import com.tzuhsien.noodoeassignment.data.model.LoginResult
-import com.tzuhsien.noodoeassignment.data.model.ParkingInfoResult
+import com.tzuhsien.noodoeassignment.data.model.*
 import com.tzuhsien.noodoeassignment.data.source.DataSource
 import com.tzuhsien.noodoeassignment.network.NoodoeApiService
 import com.tzuhsien.noodoeassignment.network.ParkingApiService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
@@ -18,8 +17,8 @@ import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(
     private val noodoeApiService: NoodoeApiService,
-    private val parkingApiService: ParkingApiService
-): DataSource {
+    private val parkingApiService: ParkingApiService,
+) : DataSource {
     override suspend fun logIn(userInput: LoginInput): Result<LoginResult> =
         withContext(Dispatchers.IO) {
 
@@ -43,21 +42,79 @@ class RemoteDataSource @Inject constructor(
             }
         }
 
-    override suspend fun getParkingInfo(): Result<ParkingInfoResult> = withContext(Dispatchers.IO) {
+    override suspend fun getParkingInfo(): Result<List<ParkingInfoToDisplay>> =
+        withContext(Dispatchers.IO) {
 
-        if (!Util.isInternetConnected()) {
-            return@withContext Result.Fail(Util.getString(R.string.internet_not_connected))
+            if (!Util.isInternetConnected()) {
+                return@withContext Result.Fail(Util.getString(R.string.internet_not_connected))
+            }
+
+            try {
+                val parkingInfo = async { parkingApiService.getParkingInfo() }
+                val available = async { parkingApiService.getAvailableSpots() }
+
+                val result = assembleParkingInfo(parkingInfo.await(), available.await())
+
+                Result.Success(result)
+
+            } catch (e: HttpException) {
+                Timber.w(" exception=${e.message}")
+                Result.Error(e)
+            }
+
         }
 
-        try {
-            val result = parkingApiService.getParkingInfo()
+    private fun assembleParkingInfo(
+        parkingInfo: ParkingInfoResult,
+        available: AvailableSpaceResult,
+    ): List<ParkingInfoToDisplay> {
 
-            Result.Success(result)
+        val listToDisplay = mutableListOf<ParkingInfoToDisplay>()
 
-        } catch (e: HttpException) {
-            Timber.w(" exception=${e.message}")
-            Result.Error(e)
+        for (park in parkingInfo.data.park) {
+            for (available in available.data.park) {
+
+                if (park.id == available.id) {
+                    val parkingLot = ParkingInfoToDisplay(
+                        id = park.id,
+                        name = park.name,
+                        address = park.address,
+                        totalCar = park.totalCar,
+                        availableCar = available.availablecar,
+                        socketQty = if (null == available.chargeStation?.socketStatusList) null else available.chargeStation.socketStatusList.size,
+                        socketInUse = if (null == available.chargeStation?.socketStatusList) null else calculateSocketInUse(
+                            available.chargeStation.socketStatusList),
+                        socketAvailable = if (null == available.chargeStation?.socketStatusList) null else calculateSocketAvailable(
+                            available.chargeStation.socketStatusList),
+                        )
+                    listToDisplay.add(parkingLot)
+                }
+            }
         }
+        return listToDisplay
     }
 
+    private fun calculateSocketInUse(socketStatusList: List<SocketStatus>): Int {
+        if (socketStatusList.isEmpty()) return 0
+        var inUse = 0
+        var available = 0
+        for (s in socketStatusList) {
+            when (s.spotStatus){
+                "充電中" -> inUse ++
+                "待機中" -> available ++
+            }
+        }
+        return inUse
+    }
+
+    private fun calculateSocketAvailable(socketStatusList: List<SocketStatus>): Int {
+        if (socketStatusList.isEmpty()) return 0
+        var available = 0
+        for (s in socketStatusList) {
+            when (s.spotStatus){
+                "待機中" -> available ++
+            }
+        }
+        return available
+    }
 }

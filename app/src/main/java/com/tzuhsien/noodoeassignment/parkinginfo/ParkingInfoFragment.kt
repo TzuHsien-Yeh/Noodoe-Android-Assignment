@@ -22,7 +22,13 @@ class ParkingInfoFragment : Fragment() {
     ): View? {
         binding = FragmentParkingInfoBinding.inflate(layoutInflater)
 
-        viewModel
+        val adapter = ParkingInfoAdapter()
+        binding.recyclerViewParkingInfo.adapter = adapter
+        viewModel.parkingLotList.observe(viewLifecycleOwner){
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
 
         return binding.root
     }

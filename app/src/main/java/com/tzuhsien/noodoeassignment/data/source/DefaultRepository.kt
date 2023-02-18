@@ -4,6 +4,7 @@ import com.tzuhsien.noodoeassignment.data.Result
 import com.tzuhsien.noodoeassignment.data.model.LoginInput
 import com.tzuhsien.noodoeassignment.data.model.LoginResult
 import com.tzuhsien.noodoeassignment.data.model.ParkingInfoResult
+import com.tzuhsien.noodoeassignment.data.model.ParkingInfoToDisplay
 import com.tzuhsien.noodoeassignment.data.source.local.UserManager
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,7 +32,7 @@ class DefaultRepository @Inject constructor(
         return loginResult
     }
 
-    override suspend fun getParkingInfo(): Result<ParkingInfoResult> {
+    override suspend fun getParkingInfo(): Result<List<ParkingInfoToDisplay>> {
         return remoteDataSource.getParkingInfo()
     }
 

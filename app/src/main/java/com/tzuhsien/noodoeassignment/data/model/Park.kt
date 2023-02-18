@@ -1,32 +1,14 @@
 package com.tzuhsien.noodoeassignment.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Park(
-    val AEDEquipment: String?,
-    val AccessibilityElevator: String?,
-    val CellSignalEnhancement: String?,
-    val ChargingStation: String?,
-    val ChildPickupArea: String?,
-    val EntranceCoord: EntranceCoord?,
-    val FareInfo: FareInfo?,
-    val HandicapFirst: String?,
-    val PhoneCharge: String?,
-    val PregnancyFirst: String?,
-    val TaxiOnehrFree: String?,
+    @SerializedName("ChargingStation") val chargingStation: String?,
     val address: String,
     val area: String,
     val id: String,
     val name: String,
-    val payex: String,
     val serviceTime: String,
-    val summary: String,
     val tel: String,
-    val totalbike: Int,
-    val totalbus: Int,
-    val totalcar: Int,
-    val totallargemotor: String?,
-    val totalmotor: Int,
-    val tw97x: String,
-    val tw97y: String,
-    val type: String,
-    val type2: String?
+    @SerializedName("totalcar") val totalCar: Int
 )
