@@ -28,7 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/email"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="textEmailAddress"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -46,14 +47,16 @@
         app:boxCornerRadiusTopStart="4dp"
         app:boxCornerRadiusTopEnd="4dp"
         app:boxCornerRadiusBottomStart="4dp"
-        app:boxCornerRadiusBottomEnd="4dp">
+        app:boxCornerRadiusBottomEnd="4dp"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:singleLine="true"
-            android:hint="@string/password" />
+            android:hint="@string/password"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
