@@ -1,7 +1,5 @@
 package com.tzuhsien.noodoeassignment.login
 
-import android.graphics.Color
-import android.graphics.drawable.ColorStateListDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +8,10 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import com.tzuhsien.noodoeassignment.R
+import androidx.navigation.fragment.findNavController
+import com.tzuhsien.noodoeassignment.NavGraphDirections
 import com.tzuhsien.noodoeassignment.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -44,6 +41,13 @@ class LoginFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner){
             it?.let {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.navigateToParkingInfo.observe(viewLifecycleOwner){
+            if(it) {
+                findNavController().navigate(NavGraphDirections.actionGlobalParkingInfoFragment())
+                viewModel.doneNavigation()
             }
         }
 

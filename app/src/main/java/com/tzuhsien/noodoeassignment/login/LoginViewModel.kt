@@ -22,6 +22,10 @@ class LoginViewModel @Inject constructor(
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
+    private val _navigateToParkingInfo = MutableLiveData<Boolean>()
+    val navigateToParkingInfo: LiveData<Boolean>
+        get() = _navigateToParkingInfo
+
     private val _status = MutableLiveData<LoadApiStatus>()
     val status: LiveData<LoadApiStatus>
         get() = _status
@@ -78,7 +82,8 @@ class LoginViewModel @Inject constructor(
                         _status.value = LoadApiStatus.DONE
 
                         Timber.d("result.data = ${result.data}")
-                        result.data
+
+                        navigateToParkingInfo()
                     }
                     is Result.Fail -> {
                         _error.value = result.error
@@ -96,6 +101,14 @@ class LoginViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun navigateToParkingInfo(){
+        _navigateToParkingInfo.value = true
+    }
+
+    fun doneNavigation() {
+        _navigateToParkingInfo.value = false
     }
 
 }

@@ -9,4 +9,16 @@
         android:name="com.tzuhsien.noodoeassignment.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/parkingInfoFragment"
+        android:name="com.tzuhsien.noodoeassignment.parkinginfo.ParkingInfoFragment"
+        android:label="fragment_parking_info"
+        tools:layout="@layout/fragment_parking_info" />
+    <fragment
+        android:id="@+id/timeZoneFragment"
+        android:name="com.tzuhsien.noodoeassignment.timezone.TimeZoneFragment"
+        android:label="fragment_time_zone"
+        tools:layout="@layout/fragment_time_zone" />
+    <action android:id="@+id/action_global_timeZoneFragment" app:destination="@id/timeZoneFragment" />
+    <action android:id="@+id/action_global_parkingInfoFragment" app:destination="@id/parkingInfoFragment" />
 </navigation>
