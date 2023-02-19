@@ -45,7 +45,7 @@ class ParkingInfoViewModel @Inject constructor(
                 }
                 is Result.Fail -> {
                     _error.value = result.error
-                    Timber.d("Log in Result.Fail: ${error.value}")
+                    Timber.d("Result.Fail: ${error.value}")
                 }
                 is Result.Error -> {
                     _error.value = result.exception.toString()

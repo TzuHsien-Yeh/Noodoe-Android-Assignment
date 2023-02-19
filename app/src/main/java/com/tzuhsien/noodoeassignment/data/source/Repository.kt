@@ -2,10 +2,7 @@ package com.tzuhsien.noodoeassignment.data.source
 
 import com.tzuhsien.noodoeassignment.data.Result
 import com.tzuhsien.noodoeassignment.data.UserInfo
-import com.tzuhsien.noodoeassignment.data.model.LoginInput
-import com.tzuhsien.noodoeassignment.data.model.LoginResult
-import com.tzuhsien.noodoeassignment.data.model.ParkingInfoResult
-import com.tzuhsien.noodoeassignment.data.model.ParkingInfoToDisplay
+import com.tzuhsien.noodoeassignment.data.model.*
 
 interface Repository {
 
@@ -15,4 +12,5 @@ interface Repository {
 
     suspend fun getParkingInfo(): Result<List<ParkingInfoToDisplay>>
 
+    suspend fun updateUserTimeZone(timeZone: TimeZone, objectId: String, sessionToken: String): Result<UpdateResponse>
 }

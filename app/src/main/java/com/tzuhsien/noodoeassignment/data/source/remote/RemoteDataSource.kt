@@ -64,6 +64,35 @@ class RemoteDataSource @Inject constructor(
 
         }
 
+    override suspend fun updateUserTimeZone(
+        timeZone: TimeZone,
+        objectId: String,
+        sessionToken: String,
+    ): Result<UpdateResponse> =
+        withContext(Dispatchers.IO) {
+
+            if (!Util.isInternetConnected()) {
+                return@withContext Result.Fail(Util.getString(R.string.internet_not_connected))
+            }
+
+            try {
+
+                val result = noodoeApiService.updateUserTimeZone(
+                    applicationId = Constants.applicationId,
+                    objectId = objectId,
+                    sessionToken = sessionToken,
+                    timeZone = timeZone
+                )
+
+                Result.Success(result)
+
+            } catch (e: HttpException) {
+                Timber.w(" exception=${e.message}")
+                Result.Error(e)
+            }
+
+        }
+
     private fun assembleParkingInfo(
         parkingInfo: ParkingInfoResult,
         available: AvailableSpaceResult,
@@ -86,7 +115,7 @@ class RemoteDataSource @Inject constructor(
                             available.chargeStation.socketStatusList),
                         socketAvailable = if (null == available.chargeStation?.socketStatusList) null else calculateSocketAvailable(
                             available.chargeStation.socketStatusList),
-                        )
+                    )
 
                     Timber.d("available.chargeStation = ${available.chargeStation}, list =${available.chargeStation?.socketStatusList} ")
                     listToDisplay.add(parkingLot)
@@ -101,9 +130,9 @@ class RemoteDataSource @Inject constructor(
         var inUse = 0
         var available = 0
         for (s in socketStatusList) {
-            when (s.spotStatus){
-                "充電中" -> inUse ++
-                "待機中" -> available ++
+            when (s.spotStatus) {
+                "充電中" -> inUse++
+                "待機中" -> available++
             }
         }
         return inUse
@@ -113,8 +142,8 @@ class RemoteDataSource @Inject constructor(
         if (socketStatusList.isEmpty()) return 0
         var available = 0
         for (s in socketStatusList) {
-            when (s.spotStatus){
-                "待機中" -> available ++
+            when (s.spotStatus) {
+                "待機中" -> available++
             }
         }
         return available
