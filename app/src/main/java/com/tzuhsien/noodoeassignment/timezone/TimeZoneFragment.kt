@@ -6,27 +6,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.tzuhsien.noodoeassignment.NavGraphDirections
 import com.tzuhsien.noodoeassignment.R
+import com.tzuhsien.noodoeassignment.databinding.FragmentTimeZoneBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TimeZoneFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = TimeZoneFragment()
-    }
-
-    private lateinit var viewModel: TimeZoneViewModel
+    private lateinit var binding: FragmentTimeZoneBinding
+    private val viewModel: TimeZoneViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.fragment_time_zone, container, false)
-    }
+        binding = FragmentTimeZoneBinding.inflate(layoutInflater)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TimeZoneViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.isLoggedIn.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.txtUserNameEmail.text = viewModel.user?.userName
+            } else {
+                findNavController().navigate(NavGraphDirections.actionGlobalLoginFragment())
+            }
+        }
+
+
+        return binding.root
     }
 
 }

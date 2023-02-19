@@ -8,7 +8,13 @@
         android:id="@+id/loginFragment"
         android:name="com.tzuhsien.noodoeassignment.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_parkingInfoFragment"
+            app:destination="@id/parkingInfoFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/parkingInfoFragment"
         android:name="com.tzuhsien.noodoeassignment.parkinginfo.ParkingInfoFragment"
@@ -20,5 +26,8 @@
         android:label="fragment_time_zone"
         tools:layout="@layout/fragment_time_zone" />
     <action android:id="@+id/action_global_timeZoneFragment" app:destination="@id/timeZoneFragment" />
-    <action android:id="@+id/action_global_parkingInfoFragment" app:destination="@id/parkingInfoFragment" />
+    <action android:id="@+id/action_global_parkingInfoFragment" app:destination="@id/parkingInfoFragment"
+        app:popUpTo="@id/loginFragment"
+        app:popUpToInclusive="true" />
+    <action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" />
 </navigation>

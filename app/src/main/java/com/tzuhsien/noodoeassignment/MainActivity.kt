@@ -35,13 +35,17 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.parkingInfoFragment -> {
                     toolbar.visibility = View.VISIBLE
+                    binding.toolbarTextTimeZone.visibility = View.VISIBLE
                     toolbar.navigationIcon = null
+                    binding.toolbarTextTimeZone.setOnClickListener {
+                        navController.navigate(NavGraphDirections.actionGlobalTimeZoneFragment())
+                    }
                 }
 
                 R.id.timeZoneFragment ->  {
                     toolbar.visibility = View.VISIBLE
-                    toolbar.setNavigationIcon(R.drawable.arrow_left)
-                    toolbar.setNavigationOnClickListener { onBackPressed() }
+                    toolbar.setNavigationIcon(R.drawable.ic_b)
+                    toolbar.setNavigationOnClickListener { navController.navigateUp() }
                     binding.toolbarTextTimeZone.visibility = View.GONE
                 }
             }
@@ -49,7 +53,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-        navController.navigateUp()
-    }
 }

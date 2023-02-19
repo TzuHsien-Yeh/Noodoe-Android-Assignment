@@ -1,6 +1,7 @@
 package com.tzuhsien.noodoeassignment.data.source
 
 import com.tzuhsien.noodoeassignment.data.Result
+import com.tzuhsien.noodoeassignment.data.UserInfo
 import com.tzuhsien.noodoeassignment.data.model.LoginInput
 import com.tzuhsien.noodoeassignment.data.model.LoginResult
 import com.tzuhsien.noodoeassignment.data.model.ParkingInfoResult
@@ -17,19 +18,23 @@ class DefaultRepository @Inject constructor(
 
          when (loginResult) {
             is Result.Success -> {
-                UserManager.userName = loginResult.data.userName
-                UserManager.objectId = loginResult.data.objectId
-                UserManager.timeZone = loginResult.data.timeZone
-                UserManager.sessionToken = loginResult.data.sessionToken
-                
-                Timber.d("UserManager.timeZone = ${UserManager.timeZone}, UserManager.sessionToken = ${UserManager.sessionToken}")
+                UserManager.user = UserInfo(
+                    userName = loginResult.data.userName,
+                    objectId = loginResult.data.objectId,
+                    timeZone = loginResult.data.timeZone,
+                    sessionToken = loginResult.data.sessionToken
+                )
+
+                Timber.d("UserManager.user = ${UserManager.user}")
             }
             else -> {}
         }
 
-        Timber.d("UserManager.timeZone = ${UserManager.timeZone}, UserManager.sessionToken = ${UserManager.sessionToken}")
-
         return loginResult
+    }
+
+    override fun getUserInfo(): UserInfo? {
+        return UserManager.user
     }
 
     override suspend fun getParkingInfo(): Result<List<ParkingInfoToDisplay>> {

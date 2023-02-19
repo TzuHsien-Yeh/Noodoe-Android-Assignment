@@ -46,7 +46,7 @@ class LoginFragment : Fragment() {
 
         viewModel.navigateToParkingInfo.observe(viewLifecycleOwner){
             if(it) {
-                findNavController().navigate(NavGraphDirections.actionGlobalParkingInfoFragment())
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToParkingInfoFragment())
                 viewModel.doneNavigation()
             }
         }
