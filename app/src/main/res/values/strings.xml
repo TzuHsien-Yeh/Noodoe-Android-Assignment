@@ -11,4 +11,13 @@
     <string name="please_input_to_login">Please Input to login</string>
     <string name="time_zone">Time Zone</string>
     <string name="taipei_parking_information">Taipei parking information</string>
+
+    <string name="park_id">id: %1s</string>
+    <string name="park_name">name: %1s</string>
+    <string name="park_address">address: %1s</string>
+    <string name="park_total_car">total car: %1$d</string>
+    <string name="park_available_car">available car: %1$d</string>
+    <string name="park_socket_available">待機中總數: %1$d</string>
+    <string name="park_socket_in_use">充電中總數: %1$d</string>
+    <string name="charge_station_info">充電站資訊</string>
 </resources>

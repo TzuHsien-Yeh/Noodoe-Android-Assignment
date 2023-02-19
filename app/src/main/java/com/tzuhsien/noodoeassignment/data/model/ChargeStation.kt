@@ -1,5 +1,7 @@
 package com.tzuhsien.noodoeassignment.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class ChargeStation(
-    val socketStatusList: List<SocketStatus>
+    @SerializedName("scoketStatusList") val socketStatusList: List<SocketStatus>
 )

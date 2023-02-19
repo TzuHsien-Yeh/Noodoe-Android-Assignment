@@ -80,13 +80,15 @@ class RemoteDataSource @Inject constructor(
                         name = park.name,
                         address = park.address,
                         totalCar = park.totalCar,
-                        availableCar = available.availablecar,
+                        availableCar = available.availableCar,
                         socketQty = if (null == available.chargeStation?.socketStatusList) null else available.chargeStation.socketStatusList.size,
                         socketInUse = if (null == available.chargeStation?.socketStatusList) null else calculateSocketInUse(
                             available.chargeStation.socketStatusList),
                         socketAvailable = if (null == available.chargeStation?.socketStatusList) null else calculateSocketAvailable(
                             available.chargeStation.socketStatusList),
                         )
+
+                    Timber.d("available.chargeStation = ${available.chargeStation}, list =${available.chargeStation?.socketStatusList} ")
                     listToDisplay.add(parkingLot)
                 }
             }

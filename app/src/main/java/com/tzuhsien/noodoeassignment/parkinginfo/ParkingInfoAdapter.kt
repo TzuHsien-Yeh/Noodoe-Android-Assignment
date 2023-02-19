@@ -1,10 +1,14 @@
 package com.tzuhsien.noodoeassignment.parkinginfo
 
+import android.opengl.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.tzuhsien.amazingtalker.util.Util
+import com.tzuhsien.noodoeassignment.R
 import com.tzuhsien.noodoeassignment.data.model.ParkingInfoToDisplay
 import com.tzuhsien.noodoeassignment.databinding.ItemParkBinding
 
@@ -13,13 +17,23 @@ class ParkingInfoAdapter: ListAdapter<ParkingInfoToDisplay, ParkingInfoAdapter.P
     class ParkViewHolder(private val binding: ItemParkBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(park: ParkingInfoToDisplay) {
 
-            binding.txtId.text = park.id
-            binding.txtName.text = park.name
-            binding.txtAddress.text = park.address
-            binding.txtTotalCar.text = park.totalCar.toString()
-            binding.txtAvailableCar.text = park.availableCar.toString()
-            binding.txtSocketAvailable.text = park.socketAvailable.toString()
-            binding.txtSocketInUse.text = park.socketInUse.toString()
+            binding.txtId.text = Util.getString(R.string.park_id, park.id)
+            binding.txtName.text = Util.getString(R.string.park_name, park.name)
+            binding.txtAddress.text = Util.getString(R.string.park_address, park.address)
+            binding.txtTotalCar.text = Util.getString(R.string.park_total_car, park.totalCar)
+            binding.txtAvailableCar.text = Util.getString(R.string.park_available_car, park.availableCar)
+
+            binding.txtChargeStation.visibility = if (null == park.socketQty) View.GONE else View.VISIBLE
+
+            binding.txtSocketAvailable.apply {
+                text = Util.getString(R.string.park_socket_available, park.socketAvailable)
+                visibility = if (null == park.socketAvailable) View.GONE else View.VISIBLE
+            }
+            binding.txtSocketInUse.apply {
+                text = Util.getString(R.string.park_socket_in_use, park.socketInUse)
+                visibility = if (null == park.socketInUse) View.GONE else View.VISIBLE
+            }
+
         }
     }
 

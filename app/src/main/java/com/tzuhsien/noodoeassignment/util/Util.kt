@@ -17,7 +17,7 @@ object Util {
         return activeNetwork?.isConnectedOrConnecting == true
     }
 
-    fun getString(resourceId: Int, value: String? = null): String {
+    fun getString(resourceId: Int, value: Any? = null): String {
         return applicationContext().getString(resourceId, value)
     }
 
