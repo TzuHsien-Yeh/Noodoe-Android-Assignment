@@ -1,13 +1,12 @@
 package com.tzuhsien.noodoeassignment.parkinginfo
 
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.tzuhsien.amazingtalker.util.Util
+import com.tzuhsien.noodoeassignment.util.Util
 import com.tzuhsien.noodoeassignment.R
 import com.tzuhsien.noodoeassignment.data.model.ParkingInfoToDisplay
 import com.tzuhsien.noodoeassignment.databinding.ItemParkBinding

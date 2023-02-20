@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tzuhsien.amazingtalker.util.Util
+import com.tzuhsien.noodoeassignment.util.Util
 import com.tzuhsien.noodoeassignment.R
 import com.tzuhsien.noodoeassignment.data.Result
 import com.tzuhsien.noodoeassignment.data.source.Repository
@@ -41,7 +41,7 @@ class TimeZoneViewModel @Inject constructor(
         checkUserLoggedIn()
     }
 
-    private fun checkUserLoggedIn(){
+    fun checkUserLoggedIn(){
         _isLoggedIn.value = null != user
     }
 
@@ -63,12 +63,15 @@ class TimeZoneViewModel @Inject constructor(
                     }
                     is Result.Fail -> {
                         _error.value = result.error
+                        _doneTimeZoneUpdate.value = false
                     }
                     is Result.Error -> {
                         _error.value = result.exception.toString()
+                        _doneTimeZoneUpdate.value = false
                     }
                     else -> {
                         _error.value = Util.getString(R.string.unknown_error)
+                        _doneTimeZoneUpdate.value = false
                     }
                 }
             }

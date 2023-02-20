@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tzuhsien.amazingtalker.util.Util
+import com.tzuhsien.noodoeassignment.util.Util
 import com.tzuhsien.noodoeassignment.R
 import com.tzuhsien.noodoeassignment.data.Result
 import com.tzuhsien.noodoeassignment.data.model.ParkingInfoToDisplay
 import com.tzuhsien.noodoeassignment.data.source.Repository
-import com.tzuhsien.noodoeassignment.network.LoadApiStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -20,8 +19,8 @@ class ParkingInfoViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    private val _parkingLotList = MutableLiveData<List<ParkingInfoToDisplay>>()
-    val parkingLotList: LiveData<List<ParkingInfoToDisplay>>
+    private val _parkingLotList = MutableLiveData<List<ParkingInfoToDisplay>?>()
+    val parkingLotList: LiveData<List<ParkingInfoToDisplay>?>
         get() = _parkingLotList
 
     private val _error = MutableLiveData<String?>()
@@ -32,7 +31,7 @@ class ParkingInfoViewModel @Inject constructor(
         getParkingInfoData()
     }
 
-    private fun getParkingInfoData() {
+    fun getParkingInfoData() {
 
         viewModelScope.launch {
             val result = repository.getParkingInfo()

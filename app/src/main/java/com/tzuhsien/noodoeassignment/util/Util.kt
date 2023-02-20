@@ -1,4 +1,4 @@
-package com.tzuhsien.amazingtalker.util
+package com.tzuhsien.noodoeassignment.util
 
 import android.content.Context
 import android.net.ConnectivityManager

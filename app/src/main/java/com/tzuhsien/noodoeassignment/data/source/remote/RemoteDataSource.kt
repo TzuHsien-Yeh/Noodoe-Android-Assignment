@@ -1,6 +1,6 @@
 package com.tzuhsien.noodoeassignment.data.source.remote
 
-import com.tzuhsien.amazingtalker.util.Util
+import com.tzuhsien.noodoeassignment.util.Util
 import com.tzuhsien.noodoeassignment.Constants
 import com.tzuhsien.noodoeassignment.R
 import com.tzuhsien.noodoeassignment.data.Result
