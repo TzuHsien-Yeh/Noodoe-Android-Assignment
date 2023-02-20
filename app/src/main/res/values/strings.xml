@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name" translatable="false">Noodoe Assignment</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="internet_not_connected">No Internet Connection</string>
+    <string name="user_not_found">User not found</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="time_zone">Time Zone</string>
+<!--  Parking info page  -->
+    <string name="taipei_parking_information">Taipei parking information</string>
+    <string name="park_id">id: %1s</string>
+    <string name="park_name">name: %1s</string>
+    <string name="park_address">address: %1s</string>
+    <string name="park_total_car">total car: %1$d</string>
+    <string name="park_available_car">available car: %1$d</string>
+    <string name="park_socket_available">待機中總數: %1$d</string>
+    <string name="park_socket_in_use">充電中總數: %1$d</string>
+    <string name="charge_station_info">充電站資訊</string>
+    <string name="update_success">Update Success</string>
+</resources>
